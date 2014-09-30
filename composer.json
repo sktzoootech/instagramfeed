@@ -2,26 +2,22 @@
 	"name": "sktzoootech/instagramfeed",
 	"description": "A module that shows instagram feed based on a hash tag",
 	"type": "silverstripe-module",
-	"homepage": "http://github.com/ajshort/silverstripe-gridfieldextensions",
-	"keywords": ["silverstripe", "gridfield"],
+	"homepage": "https://github.com/sktzoootech/instagramfeed",
+	"keywords": ["silverstripe", "instagramfeed", "instagram"],
 	"license": "BSD-3-Clause",
 	"authors": [
 		{
-			"name": "Andrew Short",
-			"email": "andrewjshort@gmail.com"
+			"name": "Davis Dimalen",
+			"email": "davis.dimalen@gmail.com"
 		}
 	],
 	"support": {
-		"issues": "http://github.com/ajshort/silverstripe-gridfieldextensions/issues"
+		"issues": "https://github.com/sktzoootech/instagramfeed/issues"
 	},
 	"require": {
 		"silverstripe/framework": "~3.1"
 	},
 	"extra": {
-		"installer-name": "gridfieldextensions",
-		"screenshots": [
-			"docs/en/_images/editable-rows.png",
-			"docs/en/_images/add-existing-search.png"
-		]
+		"installer-name": "instagramfeed"
 	}
 }
