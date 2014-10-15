@@ -29,43 +29,47 @@ class InstagramFeed_ControllerExtension extends Extension{
 
 	public function getInstagramFeedItems(){
 
-		$api_url = 'https://api.instagram.com/v1/tags/'.$this->configSettings['DefaultHash'].'/media/recent?client_id='.$this->configSettings['ClientID'];
+		if(array_key_exists('DefaultHash', $this->configSettings)){
+			$api_url = 'https://api.instagram.com/v1/tags/'.$this->configSettings['DefaultHash'].'/media/recent?client_id='.$this->configSettings['ClientID'];
 
-		$ch = curl_init();
+			$ch = curl_init();
 
-		curl_setopt_array($ch, array(
-			CURLOPT_URL => $api_url,
-			CURLOPT_RETURNTRANSFER => 1,
-			CURLOPT_SSL_VERIFYPEER => false
-		));
+			curl_setopt_array($ch, array(
+				CURLOPT_URL => $api_url,
+				CURLOPT_RETURNTRANSFER => 1,
+				CURLOPT_SSL_VERIFYPEER => false
+			));
 
-		$output = curl_exec($ch);
+			$output = curl_exec($ch);
 
-		$instagram_json = json_decode($output);
+			$instagram_json = json_decode($output);
 
-		$whitelist_fields = array('created_time', 'link', 'images', 'likes');
+			$whitelist_fields = array('created_time', 'link', 'images', 'likes');
 
-		$row_array = array();
-		foreach($instagram_json->data as $items){
-			$coloumn_array = array();
-			foreach($items as $key => $value){
-				if(in_array($key, $whitelist_fields)){
-					if($key == 'images'){
-						$coloumn_array['LowResImage'] =  $value->low_resolution->url;
-						$coloumn_array['StandardResImage'] =  $value->standard_resolution->url;
-						$coloumn_array['Thumbnail'] =  $value->thumbnail->url;
-					} elseif($key == 'likes'){
-						$coloumn_array['Likes'] =  $value->count;
-					} else {
-						$coloumn_array[$key] =  $value;
+			$row_array = array();
+			foreach($instagram_json->data as $items){
+				$coloumn_array = array();
+				foreach($items as $key => $value){
+					if(in_array($key, $whitelist_fields)){
+						if($key == 'images'){
+							$coloumn_array['LowResImage'] =  $value->low_resolution->url;
+							$coloumn_array['StandardResImage'] =  $value->standard_resolution->url;
+							$coloumn_array['Thumbnail'] =  $value->thumbnail->url;
+						} elseif($key == 'likes'){
+							$coloumn_array['Likes'] =  $value->count;
+						} else {
+							$coloumn_array[$key] =  $value;
+						}
 					}
 				}
+				array_push($row_array, ArrayData::create($coloumn_array));
 			}
-			array_push($row_array, ArrayData::create($coloumn_array));
+
+			$instagram_feed_arraylist = ArrayList::create($row_array);
+
+			return $instagram_feed_arraylist->renderWith('InstagramFeed');
+		} else {
+			return null;
 		}
-
-		$instagram_feed_arraylist = ArrayList::create($row_array);
-
-		return $instagram_feed_arraylist->renderWith('InstagramFeed');
 	}
 }
